@@ -1,0 +1,170 @@
+using System;
+
+namespace BinaryTreeExample
+{
+    // Definición de nodo del árbol binario
+    class Node
+    {
+        public int Data;
+        public Node Left, Right;
+
+        public Node(int data)
+        {
+            Data = data;
+            Left = Right = null;
+        }
+    }
+
+    // Definición del árbol binario
+    class BinaryTree
+    {
+        public Node Root;
+
+        public BinaryTree()
+        {
+            Root = null;
+        }
+
+        // Método para insertar un nodo en el árbol
+        public void Insert(int data)
+        {
+            Root = InsertRec(Root, data);
+        }
+
+        private Node InsertRec(Node root, int data)
+        {
+            if (root == null)
+            {
+                root = new Node(data);
+                return root;
+            }
+
+            if (data < root.Data)
+                root.Left = InsertRec(root.Left, data);
+            else if (data > root.Data)
+                root.Right = InsertRec(root.Right, data);
+
+            return root;
+        }
+
+        // Recorridos del árbol
+        public void InOrder() => InOrderRec(Root);
+        private void InOrderRec(Node root)
+        {
+            if (root != null)
+            {
+                InOrderRec(root.Left);
+                Console.Write(root.Data + " ");
+                InOrderRec(root.Right);
+            }
+        }
+
+        public void PreOrder() => PreOrderRec(Root);
+        private void PreOrderRec(Node root)
+        {
+            if (root != null)
+            {
+                Console.Write(root.Data + " ");
+                PreOrderRec(root.Left);
+                PreOrderRec(root.Right);
+            }
+        }
+
+        public void PostOrder() => PostOrderRec(Root);
+        private void PostOrderRec(Node root)
+        {
+            if (root != null)
+            {
+                PostOrderRec(root.Left);
+                PostOrderRec(root.Right);
+                Console.Write(root.Data + " ");
+            }
+        }
+
+        // Búsqueda en el árbol
+        public bool Search(int key) => SearchRec(Root, key);
+        private bool SearchRec(Node root, int key)
+        {
+            if (root == null)
+                return false;
+
+            if (root.Data == key)
+                return true;
+
+            if (root.Data > key)
+                return SearchRec(root.Left, key);
+
+            return SearchRec(root.Right, key);
+        }
+
+        // Menú interactivo para mostrar las operaciones
+        public void Menu()
+        {
+            int option, value;
+
+            do
+            {
+                Console.WriteLine("\nMenú de operaciones:");
+                Console.WriteLine("1. Insertar en el árbol");
+                Console.WriteLine("2. Recorrer en Preorden");
+                Console.WriteLine("3. Recorrer en Inorden");
+                Console.WriteLine("4. Recorrer en Postorden");
+                Console.WriteLine("5. Buscar en el árbol");
+                Console.WriteLine("6. Salir");
+                Console.Write("Elija una opción: ");
+                option = int.Parse(Console.ReadLine());
+
+                switch (option)
+                {
+                    case 1:
+                        Console.Write("Ingrese el valor a insertar: ");
+                        value = int.Parse(Console.ReadLine());
+                        Insert(value);
+                        break;
+
+                    case 2:
+                        Console.WriteLine("Recorrido Preorden:");
+                        PreOrder();
+                        Console.WriteLine();
+                        break;
+
+                    case 3:
+                        Console.WriteLine("Recorrido Inorden:");
+                        InOrder();
+                        Console.WriteLine();
+                        break;
+
+                    case 4:
+                        Console.WriteLine("Recorrido Postorden:");
+                        PostOrder();
+                        Console.WriteLine();
+                        break;
+
+                    case 5:
+                        Console.Write("Ingrese el valor a buscar: ");
+                        value = int.Parse(Console.ReadLine());
+                        bool found = Search(value);
+                        Console.WriteLine(found ? "Valor encontrado." : "Valor no encontrado.");
+                        break;
+
+                    case 6:
+                        Console.WriteLine("Saliendo...");
+                        break;
+
+                    default:
+                        Console.WriteLine("Opción no válida.");
+                        break;
+                }
+            } while (option != 6);
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            BinaryTree tree = new BinaryTree();
+            tree.Menu();
+        }
+    }
+}
